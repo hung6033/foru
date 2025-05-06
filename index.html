@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Invitation</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Dancing+Script&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f8f8;
+        font-family: "Montserrat", sans-serif;
+        overflow: hidden;
+        flex-direction: column;
+        color: #ff9999;
+        transition: background-color 0.5s;
+      }
+
+      h1 {
+        font-size: 2rem;
+        text-align: center;
+        transition: opacity 0.5s;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .button {
+        position: relative;
+        background-color: #ff007f;
+        color: white;
+        border: none;
+        padding: 15px 50px;
+        font-size: 1.2em;
+        border-radius: 10px;
+        cursor: pointer;
+        overflow: hidden;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        transition: color 0.3s, transform 0.3s;
+      }
+
+      .button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        transition: left 0.5s;
+        z-index: 0;
+      }
+
+      .button:hover::before {
+        left: 0;
+      }
+
+      .button:hover {
+        color: #ff007f;
+      }
+
+      .button .text {
+        position: relative;
+        z-index: 1;
+      }
+
+      .start-button {
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: #ff007f;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s;
+      }
+
+      .chat-box {
+        display: none;
+        background-color: #fff;
+        border-radius: 15px;
+        border: 2px solid black;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        position: absolute;
+        top: 7%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        width: 250px;
+        text-align: center;
+      }
+
+      .chat-box::before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+      }
+
+      .card {
+        display: none;
+        width: 50vw;
+        height: 60vh;
+        background-color: white;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+        padding: 20px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        transform: translateY(-100%);
+      }
+
+      .card.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .corner-text {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 28px;
+        color: #a21d33;
+      }
+
+      .quote {
+        margin-top: 10px;
+        font-size: 24px;
+        color: #666;
+      }
+
+      .flowers {
+        font-size: 40px;
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+      }
+
+      .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        clip-path: polygon(
+          50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%
+        );
+        opacity: 0.7;
+        animation: float 8s infinite;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh);
+          opacity: 0;
+        }
+      }
+
+      .text-box {
+        background-color: white;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px auto;
+        width: 90%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        font-size: 21px;
+        text-align: left;
+        position: relative;
+        top: 1cm;
+        font-family: 'Dancing Script', cursive;
+      }
+
+      .signature {
+        text-align: right;
+        font-family: 'Dancing Script', cursive;
+        font-size: 16px;
+        margin-top: 20px;
+      }
+
+      .intro {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+      }
+
+      .message {
+        text-align: center;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+      }
+
+      .image-container {
+        position: relative;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .image-container img {
+        width: 3in;
+        height: 3in;
+      }
+
+      .image-button {
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: #ff007f;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s;
+      }
+
+      .click-me {
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        background-color: #ffd1d6;
+        color: #a21d33;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+      }
+
+      .click-me:hover {
+        background-color: #a21d33;
+        color: #ffd1d6;
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="intro" id="intro">
+        <p>Hôm nay không phải là một ngày gì đặc biệt nhưng,</p>
+        <p>Anh có một món quà tặng em.</p>
+        <button class="button start-button" id="start-button">
+          <span class="text">Cùng xem nhé :></span>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      const container = document.querySelector(".container");
+      const startButton = document.querySelector(".start-button");
+
+      startButton.onclick = () => {
+        renderImages();
+      };
+
+      function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = Math.random() * 3 + 5 + "s";
+        container.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 8000);
+      }
+
+      function renderImages() {
+        container.innerHTML = `
+          <div class="images">
+            <div class="message" id="message">
+              <p>Đầu tiên là hoa nèeeeeee</p>
+            </div>
+
+            <div class="image-container" id="image-container">
+              <img
+                id="main-image"
+                src="https://i.imgur.com/xPKj6zk.png"
+                alt="Flowers"
+              />
+            </div>
+
+            <button class="button image-button" id="image-button">
+              <span class="text">Tiếp theo sẽ là một tấm thiệp</span>
+            </button>
+          </div>
+        `;
+
+        const imageButton = document.querySelector(".image-button");
+        imageButton.onclick = () => {
+          renderIndex();
+        };
+      }
+
+      let noClickCount = 0;
+
+      function onClickYesButton() {
+        document
+          .getElementById("yes-button")
+          .addEventListener("click", function () {
+            document.body.style.backgroundColor = "#ffd1d6";
+            document.getElementById("invitation-text").style.opacity = "0";
+            document.getElementById("chat-box").style.display = "none";
+            document.getElementById("image-container").style.display = "none";
+            document.querySelector(".buttons").style.display = "none";
+            const card = document.getElementById("card");
+            card.style.display = "block";
+            setTimeout(() => {
+              card.classList.add("show");
+            }, 10);
+          });
+      }
+
+      function onClickNoButton() {
+        document
+          .getElementById("no-button")
+          .addEventListener("click", function () {
+            noClickCount++;
+            const noButton = this;
+            const yesButton = document.getElementById("yes-button");
+            const chatBox = document.getElementById("chat-box");
+            const quote = document.getElementById("quote");
+            const imageContainer = document.getElementById("image-container");
+            const mainImage = document.getElementById("main-image");
+
+            if (noClickCount === 1) {
+              imageContainer.style.display = "block";
+              chatBox.style.display = "block";
+              noButton.style.transform = "scale(0.7)";
+              document.getElementById("invitation-text").style.marginBottom =
+                "1cm";
+              yesButton.style.transform = "scale(1.2)";
+            } else if (noClickCount === 2) {
+              mainImage.src = "https://i.imgur.com/zdA8RRk.jpeg";
+              quote.textContent = "Really? You're breaking my heart!";
+              noButton.style.transform = "scale(0.4)";
+              yesButton.style.transform = "scale(1.5)";
+            } else if (noClickCount === 3) {
+              mainImage.src =
+                "https://i.imgur.com/V1QLgFV.jpeg";
+              quote.textContent = "Please don't!";
+              noButton.style.display = "none";
+              yesButton.classList.add("large");
+              yesButton.style.transform = "scale(2)";
+            }
+          });
+      }
+
+      function renderIndex() {
+        setInterval(createHeart, 1000);
+
+        container.innerHTML = `
+         <div class="image-container" id="image-container">
+            <img
+              id="main-image"
+              src="https://i.imgur.com/ZN4wsuE.png"
+              alt="Image"
+            />
+          </div>
+
+          <div class="chat-box" id="chat-box">
+            <div class="quote" id="quote">Đừng màa :<</div>
+          </div>
+
+          <h1 id="invitation-text">Em có muốn mở nó ra không?</h1>
+
+          <div class="buttons">
+            <button class="button yes-button" id="yes-button">
+              <span class="text">Dạaa</span>
+            </button>
+            <button class="button no-button" id="no-button">
+              <span class="text">Đéo</span>
+            </button>
+          </div>
+
+          <div class="card" id="card">
+            <div class="corner-text">FOR MY BAE</div>
+            <div class="text-box">
+              Anh biết tụi mình chưa thật sự thân thiết, giữa tụi mình vẫn còn nhiều khoảng cách... 
+              Nhưng anh vẫn mong món quà nhỏ này có thể khiến em vui hơn một chút.
+              Em xứng đáng nhận được những điều tốt đẹp và quý giá nhất, không thua kém bất kỳ ai
+              Dù món quà này có thể không có giá trị gì lớn lao, thậm chí hơi trẻ con, nhưng đó là tất cả những gì anh có thể làm lúc này.
+              Anh thật lòng mong sẽ có dịp khác để gửi tặng em điều gì đó xứng đáng hơn.
+              Có thể bây giờ mọi thứ chưa đủ, nhưng anh sẽ cố gắng – cho năm sau, và những năm sau nữa – hy vọng tụi mình vẫn còn giữ được mối quan hệ này đến khi đó.
+              Chúc cho mọi điều tốt đẹp nhất sẽ đến với em, học tập cho tốt và gắng đạt được ước mơ của mình nhé!
+              Anh không  chắc mình đủ giỏi để xóa đi những vết thương cũ trong em...
+              Nhưng anh muốn thử một lần, để trở thành lí do em dám tin tình yêu thêm một lần nữa..!
+              <div class="signature">
+                Best wishes,<br />
+                your sincerely!
+              </div>
+            </div>
+            <div class="flowers">🌸 🌼 🌺 🌷 🌻</div>
+            <button class="click-me" id="push-me">PUSH ME</button>
+          </div>
+        `;
+
+        onClickYesButton();
+        onClickNoButton();
+
+        // Thêm sự kiện cho nút "PUSH ME"
+        document.getElementById("push-me").onclick = () => {
+            window.location.href = "https://www.facebook.com/Hfilwu.6033?locale=vi_VN";
+        };
+      }
+    </script>
+  </body>
+</html>
